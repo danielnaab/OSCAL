@@ -11,7 +11,7 @@
    <xsl:output indent="true"/>
    <!-- Processing architecture -->
    <!-- $file should be a URI, absolute or relative to the XSLT transformation-->
-   <xsl:param name="file" as="xs:anyURI?"/>
+   <xsl:param name="file" as="xs:string?"/>
    <!-- Pass in $produce=supermodel to produce OSCAL M4 supermodel intermediate format -->
    <xsl:param name="produce" as="xs:string">xml</xsl:param>
    <xsl:template name="from-json">
@@ -34,7 +34,7 @@
       <xsl:param name="source">
          <xsl:choose><!-- evaluate { $file } as URI (absolute or relative to stylesheet)-->
             <xsl:when test="exists($file)">
-               <xsl:try xmlns:err="http://www.w3.org/2005/xqt-errors" select="document($file)">
+               <xsl:try xmlns:err="http://www.w3.org/2005/xqt-errors" select="unparsed-text($file) ! json-to-xml(.)">
                   <xsl:catch expand-text="true">
                      <nm:ERROR xmlns:nm="http://csrc.nist.gov/ns/metaschema" code="{ $err:code }">{ $err:description }</nm:ERROR>
                   </xsl:catch>
